@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebMap 101</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <style>
+        #header {
+            height: 55px;
+            background-color: darkgoldenrod;
+        }
+        #mapdiv{
+            height: 550px;
+            background-color: salmon;
+        }
+        #sidepanel{
+            height: 550px;
+            background-color: beige;
+        }
+        #footer{
+            height: 75px;
+            background-color: darkgray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div id="header" class="row">
+            <h1 class="text-center">Mapa de Montevideo</h1>
+        </div>
+        <div class="row">
+            <div id="sidepanel" class="col-md-3">panel</div>
+            <div id="mapdiv" class="col-md-9"></div>
+        </div>
+        <div id="footer" class="row">
+            pie de pagina
+        </div>
+    </div>
+   
+    <script>
+        //map config
+        var mymap = L.map('mapdiv');
+        mymap.setView([-34.8, -56.2],11);
+        var backgroundLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+        mymap.addLayer(backgroundLayer);
+        //adding a point to the map
+        var landmark = L.marker([-34.891201, -56.187521]);
+        landmark.addTo(mymap);
+        landmark.bindPopup("Palacio Legislativo");//can insert html inside popup
+    </script> 
+    
+</body>
+</html>
