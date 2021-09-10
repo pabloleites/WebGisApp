@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>My click register</title>
+        
+    </head>
+    <body>
+        <div id="statement">
+            <p>Let's register some clicks using javascript.</p>
+        </div>
+        <div id="registry">
+        </div>
+        <script>
+            document.body.addEventListener("click", function(e){
+                console.log("Clicked on the body");
+                console.log(e);
+                text="Clicked on the body at X:"+e.clientX+" Y:"+e.clientY+"<br>";
+                document.getElementById("registry").innerHTML += text;
+            });
+        </script>
+    </body>
+</html>
