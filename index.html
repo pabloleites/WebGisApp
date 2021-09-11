@@ -71,7 +71,7 @@
         landmark.bindPopup("Palacio Legislativo");//can insert html inside popup
 
         //get data from geojson using AJAX
-        var geojsonlayer = new L.GeoJSON.AJAX("data/attractions.geojson");
+        var geojsonlayer = new L.GeoJSON.AJAX("https://raw.githubusercontent.com/pabloleites/WebGisApp/main/data/attractions.geojson");
         geojsonlayer.addTo(mymap);
 
         //display the coordinates of the cursor
