@@ -33,6 +33,10 @@
         #content {
             height: 500px;
         }
+
+        .attraction{
+            margin: 5px;
+        }
     </style>
 </head>
 
@@ -46,7 +50,7 @@
         <div id="content" class="row">
             <div id="sidepanel" class="col-md-3">
                 <h2>Puntos de inter&eacute;s</h2>
-                <button id="btnpalacio" class="form-control btn-primary">Palacio legislativo</button>
+                <button id="btnpalacio" class="form-control btn btn-primary attraction">Palacio legislativo</button>
             </div>
             <div id="mapdiv" class="col-md-9"></div>
         </div>
@@ -68,10 +72,34 @@
         //adding a point to the map
         var landmark = L.marker([-34.891201, -56.187521]);
         landmark.addTo(mymap);
-        landmark.bindPopup("Palacio Legislativo");//can insert html inside popup
+        landmark.bindPopup("Palacio Legislativo");
+
+        //btnpalacio - zooms over palacio legislativo
+        $("#btnpalacio").click(function () {
+            mymap.setView([-34.891201, -56.187521], 17);
+        });
 
         //get data from geojson using AJAX
-        var geojsonlayer = new L.GeoJSON.AJAX("https://raw.githubusercontent.com/pabloleites/WebGisApp/main/data/attractions.geojson");
+        var geojsonlayer = new L.GeoJSON.AJAX("https://raw.githubusercontent.com/pabloleites/WebGisApp/main/data/attractions.geojson",{
+            pointToLayer:function(feature, latlng){
+                //add buttons for geojson elements      
+                var link = "<button id='btn" + feature.properties.name.replace(/[ ;&]/g, '');
+                link += "' class='form-control btn btn-primary attraction'>";
+                link += feature.properties.name + "</button>";
+                $("#sidepanel").append(link);
+
+                //event handler for the button
+                $("#btn"+ feature.properties.name.replace(/[ ;&]/g, '')).click(function(){
+                    mymap.setView([latlng.lat, latlng.lng], 17);
+                });
+
+                //add information to the marker
+                var str = "<b>" + feature.properties.name + "</b><hr>";
+                str += "<img src='" + feature.properties.image + "' width='150px'><br>"
+                str += "<a href='" + feature.properties.web + "'>ver en wikipedia</a>"
+                return L.marker(latlng).bindPopup(str);
+            }
+        });
         geojsonlayer.addTo(mymap);
 
         //display the coordinates of the cursor
@@ -80,11 +108,6 @@
                 " Longitude: " + e.latlng.lng.toFixed(5) + " Zoom level: " +
                 mymap.getZoom();
             $("#map-coords").html(str);
-        });
-
-        //btnpalacio - zooms over palacio legislativo
-        $("#btnpalacio").click(function () {
-            mymap.setView([-34.891201, -56.187521], 17);
         });
 
         //put a marker when clicking over the map
