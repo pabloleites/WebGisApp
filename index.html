@@ -16,31 +16,37 @@
             height: 55px;
             background-color: darkgoldenrod;
         }
-        #mapdiv{
-            height: 550px;
-            background-color: salmon;
-        }
         #sidepanel{
-            height: 550px;
             background-color: beige;
         }
         #footer{
             height: 75px;
             background-color: darkgray;
         }
+        #content{
+            height: 500px;
+        }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div id="header" class="row">
+            <div class="col-md-12">
             <h1 class="text-center">Mapa de Montevideo</h1>
+            </div>
         </div>
-        <div class="row">
-            <div id="sidepanel" class="col-md-3">panel</div>
+        <div id="content" class="row">
+            <div id="sidepanel" class="col-md-3">
+                <h2>Puntos de inter&eacute;s</h2>
+                <button id="btnpalacio" class="form-control btn-primary">Palacio legislativo</button>
+            </div>
             <div id="mapdiv" class="col-md-9"></div>
         </div>
-        <div id="footer" class="row">
-            pie de pagina
+        <div class="row">
+        	<div id="footer" class="col-md-12 text-center">
+                <p id="map-coords">Latitude: -34.8 Longitude: -56.2 Zoom Level: 11</p>
+                <p><a href="https://github.com/pabloleites/WebGisApp">View in Github</a></p>
+            </div>
         </div>
     </div>
    
@@ -50,10 +56,29 @@
         mymap.setView([-34.8, -56.2],11);
         var backgroundLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
         mymap.addLayer(backgroundLayer);
+        
         //adding a point to the map
         var landmark = L.marker([-34.891201, -56.187521]);
         landmark.addTo(mymap);
         landmark.bindPopup("Palacio Legislativo");//can insert html inside popup
+        
+        //btnpalacio - zooms over palacio legislativo
+        $("#btnpalacio").click(function(){
+            mymap.setView([-34.891201, -56.187521],17);
+        });
+        //display the coordinates of the cursor
+        mymap.on("mousemove", function(e){
+            var str = "Latitude: " + e.latlng.lat.toFixed(5) +
+                " Longitude: " + e.latlng.lng.toFixed(5) + " Zoom level: " +
+                mymap.getZoom();
+            $("#map-coords").html(str);
+        });
+
+        //put a marker when clicking over the map
+        mymap.on("click", function(e){
+            var point = L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
+        });
+
     </script> 
     
 </body>
