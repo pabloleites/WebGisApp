@@ -1,38 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>WebMap 101</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-   crossorigin=""/>
-   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-   crossorigin=""></script>
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="res/leaflet.ajax.min.js"></script>
     <style>
         #header {
             height: 55px;
             background-color: darkgoldenrod;
         }
-        #sidepanel{
+
+        #sidepanel {
             background-color: beige;
         }
-        #footer{
+
+        #footer {
             height: 75px;
             background-color: darkgray;
         }
-        #content{
+
+        #content {
             height: 500px;
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div id="header" class="row">
             <div class="col-md-12">
-            <h1 class="text-center">Mapa de Montevideo</h1>
+                <h1 class="text-center">Mapa de Montevideo</h1>
             </div>
         </div>
         <div id="content" class="row">
@@ -43,43 +51,49 @@
             <div id="mapdiv" class="col-md-9"></div>
         </div>
         <div class="row">
-        	<div id="footer" class="col-md-12 text-center">
+            <div id="footer" class="col-md-12 text-center">
                 <p id="map-coords">Latitude: -34.8 Longitude: -56.2 Zoom Level: 11</p>
                 <p><a href="https://github.com/pabloleites/WebGisApp">View in Github</a></p>
             </div>
         </div>
     </div>
-   
+
     <script>
         //map config
         var mymap = L.map('mapdiv');
-        mymap.setView([-34.8, -56.2],11);
+        mymap.setView([-34.8, -56.2], 11);
         var backgroundLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
         mymap.addLayer(backgroundLayer);
-        
+
         //adding a point to the map
         var landmark = L.marker([-34.891201, -56.187521]);
         landmark.addTo(mymap);
         landmark.bindPopup("Palacio Legislativo");//can insert html inside popup
-        
-        //btnpalacio - zooms over palacio legislativo
-        $("#btnpalacio").click(function(){
-            mymap.setView([-34.891201, -56.187521],17);
-        });
+
+        //get data from geojson using AJAX
+        var geojsonlayer = new L.GeoJSON.AJAX("data/attractions.geojson");
+        geojsonlayer.addTo(mymap);
+
         //display the coordinates of the cursor
-        mymap.on("mousemove", function(e){
+        mymap.on("mousemove", function (e) {
             var str = "Latitude: " + e.latlng.lat.toFixed(5) +
                 " Longitude: " + e.latlng.lng.toFixed(5) + " Zoom level: " +
                 mymap.getZoom();
             $("#map-coords").html(str);
         });
 
+        //btnpalacio - zooms over palacio legislativo
+        $("#btnpalacio").click(function () {
+            mymap.setView([-34.891201, -56.187521], 17);
+        });
+
         //put a marker when clicking over the map
-        mymap.on("click", function(e){
+        mymap.on("click", function (e) {
             var point = L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
         });
 
-    </script> 
-    
+    </script>
+
 </body>
+
 </html>
